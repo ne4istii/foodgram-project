@@ -1,0 +1,5 @@
+{% load thumbnail %}
+
+{% thumbnail filename "1000x1000" as im %}
+<img src="{{ im.url }}" class={{class}}>
+{% endthumbnail %}

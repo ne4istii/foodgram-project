@@ -1,0 +1,14 @@
+{% load thumbnail %}
+
+<li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
+  <div class="recipe recipe_reverse">
+    {% include "includes/image.html" with filename=recipe.recipe.file class="recipe__image recipe__image_big" %}
+    <h3 class="recipe__title"> {{ recipe.recipe.title }}</h3>
+    <p class="recipe__text"><span class="icon-time"></span>
+      {{ recipe.recipe.cooking_time }} мин.
+    </p>
+  </div>
+  <a href="#" class="shopping-list__button link">Удалить</a>
+</li>
+
+

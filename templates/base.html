@@ -1,0 +1,51 @@
+  <!-- Загрузка статики -->
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+  {% block styles %}
+  {% endblock %}
+</head>
+
+<body class="body">
+
+  <header class="header">
+    {% include 'includes/nav.html' %}
+  </header>
+
+  <main class="main container">
+    <div class="main__header">
+      <h1 class="main__title">
+      {% block header %}
+      {% endblock %}
+      </h1>
+      {% block tags %}
+      {% endblock %}
+    </div>
+    {% block main_content %}
+      <!-- Содержимое страницы -->
+    {% endblock %}
+  </main>  
+  {% include 'includes/footer.html' %}
+</body>
+</html>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/CardList.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script> 
+<script src="{% static 'js/api/Api.js' %}"></script>
+{% if user.is_authenticated %}
+  <script src="{% static 'js/components/Purchases.js' %}"></script>
+  <script src="{% static 'js/components/Favorites.js' %}"></script>
+{% endif %}
+
+{% block scripts %}
+{% endblock %}

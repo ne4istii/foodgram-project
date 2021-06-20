@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Мои подписки
+{% endblock %}
+
+{% block header %}
+Мои подписки
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+{% endblock %}
+
+
+
+{% block main_content %}
+{% csrf_token %}
+
+<!--  Содержание страницы -->
+<div class="card-list">
+    {% for author in page %}
+      {% include "includes/subs_card_user.html" with author=author %}
+    {% endfor %}
+</div>
+<!-- Вывод паджинатора -->
+{% if page.has_other_pages %}
+    {% include "includes/paginator.html" with items=page paginator=paginator %}
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}   
+  <script src="{% static 'js/components/Subscribe.js' %}"></script>
+  <script src="{% static 'js/components/MyFollow.js' %}"></script>
+  <script src="{% static 'myFollow.js' %}"></script>
+{% endblock %}

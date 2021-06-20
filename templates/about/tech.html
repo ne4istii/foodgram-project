@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Технологии
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+
+
+{% block header %}
+Технологии
+{% endblock %}
+
+{% block main_content %}
+
+<div class="form-container">
+    <h2>
+      <p>В проекте использовался стек технологий:</p>
+      <ul>
+        <li>Python3 + Django REST Framework</li>
+        <li>Django-filter - фильтрация запросов</li>
+        <li>SQLite3 - база данных</li>
+        <li>Git - система контроля версий</li>
+      </ul>
+    </h2>
+</div>
+
+{% endblock %}

@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+staticfilesall/
+sent_emails/
+recipes/migrations/
+users/migrations/
+media/
+static (copy).zip
+workspace.code-workspace
+db.sqlite3

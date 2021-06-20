@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Список покупок
+{% endblock %}
+
+{% block header %}
+Список покупок
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock %}
+
+
+{% block main_content %}
+{% csrf_token %}
+
+<!--  Содержание страницы -->
+<div class="card-list card-list_column">
+  <ul class="shopping-list">
+    {% for recipe in page %}
+      {% include "includes/shop_list_item.html" with recipe=recipe %}
+    {% endfor %}
+    
+    {% if user.purchases.exists %}
+      <a href="{% url 'purchases_download' %}">
+        <button class="button button_style_blue">
+          Скачать список
+        </button>                 
+      </a>
+    {% else %}
+      <div class="card-header">
+        Начните добавлять рецепты в Список покупок!<br> 
+        Это можно сделать на Главной странице, 
+        Странице автора или на Странице рецепта!
+      </div>
+    {% endif %}
+  </ul>
+</div>
+<!-- Вывод паджинатора -->
+{% if page.has_other_pages %}
+    {% include "includes/paginator.html" with items=page paginator=paginator %}
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}   
+  <script src="{% static 'js/components/ShopList.js' %}"></script>
+  <script src="{% static 'shopList.js' %}"></script>
+{% endblock %}
