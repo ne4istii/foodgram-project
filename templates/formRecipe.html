@@ -92,7 +92,7 @@
             {% for ingredient in ingredientsrecipe %}
               <div class="form__field-item-ingredient" id="ing_{{ forloop.counter }}">
                 <span>
-                  {{ ingredient.ingredient.title }} {{ingredient.amount }} {{ ingredient.ingredient.dimension }}.
+                  {{ ingredient.ingredient.title }} {{ ingredient.amount }} {{ ingredient.ingredient.dimension }}.
                 </span>
                 <span class="form__field-item-delete"></span>
                 <input 
@@ -113,6 +113,9 @@
               </div>
             {% endfor %}
             {% endif %}
+            <span class="form__error">
+              {{ form.non_field_errors }}
+            </span>
           </div>
           <span class="form__ingredient-link" id="addIng">
             Добавить ингредиент

@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xth8fgvtpl$)csmd-f9w_x$mlun)y11%m0af*n&7@t0e$%f!-3'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -150,7 +150,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SITE_ID = 1
 
 # Login
-
+OBJ_PER_PAGE = 6
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "recipes" 
 LOGOUT_REDIRECT_URL = "recipes"  

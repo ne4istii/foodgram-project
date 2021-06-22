@@ -26,7 +26,7 @@
       <li class="card-user__item">
           <a href="{% url 'profile' author.author %}" 
           class="card-user__link link">
-            Еще 7 рецептов...
+            Еще {{ author.author.recipes.count|add:-3 }} рецептов...
           </a>
       </li>
       {% endif %}

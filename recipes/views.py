@@ -7,10 +7,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .filters import FavoriteFilter, RecipeFilter
 from .forms import RecipeForm
 from .models import  Ingredient, IngredientRecipe, Recipe, Tag, User 
+from foodgram.settings import OBJ_PER_PAGE
+from .utils import get_ingredients, get_purchase_ingredients
 
 import datetime
 import io
-from decimal import Decimal
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -27,13 +28,10 @@ def recipes(request):
         queryset=Recipe.objects.all()
     )
     active_tags = recipes.data.get('search')
-    paginator = Paginator(recipes.qs, 6)
+    paginator = Paginator(recipes.qs, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    if user.is_authenticated and user.purchases.exists():
-        purchases_counter = user.purchases.count()
-    else:
-        purchases_counter = 0
+    purchases_counter = user.purchases.count()
     return render(request,"index.html", {
         'active_tags': active_tags,
         'tags': tags,
@@ -41,46 +39,7 @@ def recipes(request):
         'paginator': paginator,
         'purchases_counter': purchases_counter
     })
-
-
-def get_ingredients(request):
-    ingredients = {}
-    post = request.POST
-    for key, name in post.items():
-        if key.startswith('nameIngredient'):
-            num = key.partition('_')[-1]
-            ingredients.update({
-                name: Decimal(post[f'valueIngredient_{num}'].replace(',','.'))
-            })
-    return ingredients
-
-
-def save_recipe(request, form):
-    recipe = form.save(commit=False)
-    recipe.author = request.user
-    recipe.save()
-    ingredients = get_ingredients(request)
-    # находим ингредиенты для удаления из рецепта
-    for ingredient in recipe.ingredients.all():
-        if ingredient.title not in ingredients.keys():
-            IngredientRecipe.objects.filter(
-                recipe=recipe,
-                ingredient=ingredient,
-        ).delete()
-    # ингредиенты из POST запроса для создания и редактирования
-    for name, quantity in ingredients.items():
-        ingredient = get_object_or_404(Ingredient, title=name)
-        IngredientRecipe.objects.update_or_create(
-                recipe=recipe,
-                ingredient=ingredient,
-                defaults={'amount': quantity}
-        )
-    tags = request.POST.getlist('tags')
-    recipe.tags.clear()
-    for slug in tags:
-        obj = get_object_or_404(Tag, slug=slug)
-        obj.recipes.add(recipe)
-    
+ 
 
 def recipe_view(request, slug):
     recipe = get_object_or_404(
@@ -115,7 +74,7 @@ def profile(request, username):
         queryset=author.recipes.all()
     )
     active_tags = recipes.data.get('search')
-    paginator = Paginator(recipes.qs, 6)
+    paginator = Paginator(recipes.qs, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     is_author = author == request.user
@@ -134,6 +93,33 @@ def profile(request, username):
     })
 
 
+def save_recipe(request, form):
+    recipe = form.save(commit=False)
+    recipe.author = request.user
+    recipe.save()
+    ingredients = get_ingredients(request)
+    # находим ингредиенты для удаления из рецепта
+    for ingredient in recipe.ingredients.all():
+        if ingredient.title not in ingredients.keys():
+            IngredientRecipe.objects.filter(
+                recipe=recipe,
+                ingredient=ingredient,
+        ).delete()
+    # ингредиенты из POST запроса для создания и редактирования
+    for name, quantity in ingredients.items():
+        ingredient = get_object_or_404(Ingredient, title=name)
+        IngredientRecipe.objects.update_or_create(
+                recipe=recipe,
+                ingredient=ingredient,
+                defaults={'amount': quantity}
+        )
+    tags = request.POST.getlist('tags')
+    recipe.tags.clear()
+    for slug in tags:
+        obj = get_object_or_404(Tag, slug=slug)
+        obj.recipes.add(recipe)
+
+
 @login_required
 def new_recipe(request):
     if request.method != 'POST':
@@ -147,9 +133,12 @@ def new_recipe(request):
     )
     if form.is_valid():
         save_recipe(request, form)
+        return redirect(
+            'recipes'
+        )
     return render(request, 'formRecipe.html', {
-       'form': form,
-    })
+            'form': form,
+        })
 
 
 @login_required
@@ -182,7 +171,7 @@ def recipe_edit(request, slug):
 @login_required
 def recipe_delete(request, slug):
     get_object_or_404(
-        Recipe.objects, 
+        Recipe, 
         slug=slug
     ).delete()
     return redirect('recipes')
@@ -193,7 +182,7 @@ def follow(request):
     user = request.user
     # user_followings - на кого подписан request.user
     user_followings = user.follower.all()
-    paginator = Paginator(user_followings, 6)
+    paginator = Paginator(user_followings, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'myFollow.html', {
@@ -206,7 +195,7 @@ def follow(request):
 def purchases(request):
     user = request.user
     purchases = user.purchases.all()
-    paginator = Paginator(purchases, 6)
+    paginator = Paginator(purchases, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'shopList.html', {
@@ -224,7 +213,7 @@ def favorites(request):
         queryset=user.favorites.all()
     )
     active_tags = recipesfavorite.data.get('search')
-    paginator = Paginator(recipesfavorite.qs, 6)
+    paginator = Paginator(recipesfavorite.qs, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'favorite.html', {
@@ -233,26 +222,6 @@ def favorites(request):
         'page': page,
         'paginator': paginator,
     })
-
-
-def get_purchase_ingredients(request):
-    user = request.user
-    purchases = user.purchases.all()
-    data = {}
-    for purchase in purchases:
-        ingredients_recipe = purchase.recipe.ingredientsrecipe.all()
-        for ir in ingredients_recipe:
-            if ir.ingredient.id in data.keys():
-                data[ir.ingredient.id]['amount'] += ir.amount 
-            else:    
-                data.update({
-                    ir.ingredient.id: {
-                    'ingredient': ir.ingredient.title,
-                    'amount': ir.amount,
-                    'dimension': ir.ingredient.dimension,
-                    }
-                })
-    return data
 
 
 @login_required
@@ -284,7 +253,7 @@ def purchases_download(request):
 
 def page_not_found(request, exception):
     return render(request, 'misc/404.html', 
-        {"path": request.path}, 
+        {'path': request.path}, 
         status=404
     )
 

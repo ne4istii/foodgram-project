@@ -40,9 +40,13 @@
           <a href="{% url 'purchases' %}" class="nav__link link">
             Список покупок
           </a>
+          {% if user.purchases.exists %}
           <span class="badge badge_style_blue nav__badge" id="counter">
             {{ user.purchases.count }}
           </span>
+          {% else %}
+          <span class="badge badge_style_blue nav__badge" id="counter"></span>
+          {% endif %}
         </li>
       {% endif %}
     </ul>
