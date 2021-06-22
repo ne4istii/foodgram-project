@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
 from .generics import FoodgramModelViewSet
-from recipes.models import Favorite, Ingredient, Purchase, Subscription
-from .serializers import (FavoriteSerializer, IngredientSerializer,
+from recipes.models import Ingredient, Favorite, Purchase, Subscription
+from .serializers import (IngredientSerializer, FavoriteSerializer,
                           PurchaseSerializer, SubscriptionSerializer)
 
 
