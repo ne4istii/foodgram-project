@@ -31,7 +31,10 @@ def recipes(request):
     paginator = Paginator(recipes.qs, OBJ_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    purchases_counter = user.purchases.count()
+    if user.is_authenticated:
+        purchases_counter = user.purchases.count()
+    else:
+        purchases_counter = 0
     return render(request, 'index.html', {
         'active_tags': active_tags,
         'tags': tags,

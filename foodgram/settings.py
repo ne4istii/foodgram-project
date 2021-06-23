@@ -129,9 +129,9 @@ SITE_ID = 1
 
 # Login
 OBJ_PER_PAGE = 6
-LOGIN_URL = "/auth/login/"
-LOGIN_REDIRECT_URL = "recipes"
-LOGOUT_REDIRECT_URL = "recipes"
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = 'recipes'
+LOGOUT_REDIRECT_URL = 'recipes'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
