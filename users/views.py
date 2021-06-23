@@ -13,4 +13,4 @@ class SignUp(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Регистрация'
         context['header'] = 'Регистрация'
-        return context 
+        return context

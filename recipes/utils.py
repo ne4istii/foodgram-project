@@ -8,7 +8,7 @@ def get_ingredients(request):
         if key.startswith('nameIngredient'):
             num = key.partition('_')[-1]
             ingredients.update({
-                name: Decimal(post[f'valueIngredient_{num}'].replace(',','.'))
+                name: Decimal(post[f'valueIngredient_{num}'].replace(',', '.'))
             })
     return ingredients
 
@@ -21,13 +21,11 @@ def get_purchase_ingredients(request):
         ingredients_recipe = purchase.recipe.ingredientsrecipe.all()
         for ir in ingredients_recipe:
             if ir.ingredient.id in data.keys():
-                data[ir.ingredient.id]['amount'] += ir.amount 
-            else:    
-                data.update({
-                    ir.ingredient.id: {
+                data[ir.ingredient.id]['amount'] += ir.amount
+            else:
+                data.update({ir.ingredient.id: {
                     'ingredient': ir.ingredient.title,
                     'amount': ir.amount,
-                    'dimension': ir.ingredient.dimension,
-                    }
-                })
+                    'dimension': ir.ingredient.dimension
+                }})
     return data

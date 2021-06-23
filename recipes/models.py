@@ -32,13 +32,13 @@ class Tag(models.Model):
     name = models.CharField(
         verbose_name='Имя',
         help_text='Введите имя тега',
-        max_length=50, 
+        max_length=50,
         unique=True
     )
     color = models.CharField(
         verbose_name='Цвет',
         help_text='Введите цвет для тега',
-        max_length=50, 
+        max_length=50
     )
     slug = models.SlugField(
         verbose_name='Тег',
@@ -60,15 +60,15 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         verbose_name='Автор',
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='recipes',
-        help_text='Выберите автора рецепта',
+        help_text='Выберите автора рецепта'
     )
     title = models.CharField(
         max_length=200,
         unique=True,
         verbose_name='Название рецепта',
-        help_text='Укажите название рецепта',
+        help_text='Укажите название рецепта'
     )
     description = models.TextField(
         verbose_name='Описание',
@@ -77,7 +77,7 @@ class Recipe(models.Model):
     file = models.ImageField(
         verbose_name='Загрузить фото',
         help_text='Загрузите фото приготовленного рецепта',
-        upload_to='recipes/',
+        upload_to='recipes/'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -95,31 +95,31 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField(
         validators=[MinValueValidator(limit_value=1)],
         verbose_name='Время приготовления',
-        help_text='Время приготовления в минутах',
+        help_text='Время приготовления в минутах'
     )
     slug = models.SlugField(
         verbose_name='Ссылка',
         auto_created=True,
         help_text=(
             'Заполняется автоматически по названию рецепта'
-        ),       
+        )
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации',
         auto_now_add=True,
     )
-    
+
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        ordering = ('-pub_date',)  
-    
-    def __str__(self): 
-        return self.title  
-    
+        ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.title
+
     def list_tags(self):
         return self.tags.values_list('name', flat=True)
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -136,7 +136,7 @@ class IngredientRecipe(models.Model):
         Recipe,
         verbose_name='Рецепт',
         on_delete=models.CASCADE,
-        related_name='ingredientsrecipe' 
+        related_name='ingredientsrecipe'
     )
     amount = models.DecimalField(
         verbose_name='Количество',
@@ -145,25 +145,25 @@ class IngredientRecipe(models.Model):
         validators=[MinValueValidator(float('0.01'))]
     )
 
-    def __str__(self): 
+    def __str__(self):
         return f'{self.recipe.title} содержится {self.ingredient.title} \
             в количестве {self.amount}'
-        
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Подписчик',
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='follower',
         help_text='Подписчик',
     )
     author = models.ForeignKey(
         User,
         verbose_name='Автор',
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='following',
-        help_text='Автор',
+        help_text='Автор'
     )
 
     class Meta:
@@ -171,31 +171,30 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
         unique_together = ['user', 'author']
 
-    def __str__(self): 
+    def __str__(self):
         return f'{self.user.username} подписан на автора: \
             {self.author.username}'
 
     @property
     def has_following(self):
         return self.author.following.filter(
-            user__id=self.user.id
-        ).exists()
+            user__id=self.user.id).exists()
 
 
 class Purchase(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Пользователь',
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='purchases',
-        help_text='Покупки пользователя',
+        help_text='Покупки пользователя'
     )
     recipe = models.ForeignKey(
         Recipe,
         verbose_name='Рецепт',
         on_delete=models.CASCADE,
         related_name='purchases',
-        help_text='Добавленные к покупке рецепты',
+        help_text='Добавленные к покупке рецепты'
     )
 
     class Meta:
@@ -203,8 +202,8 @@ class Purchase(models.Model):
         verbose_name_plural = 'Покупки'
         unique_together = ['user', 'recipe']
         ordering = ('-recipe__pub_date',)
-        
-    def __str__(self): 
+
+    def __str__(self):
         return f'{self.user.username} добавил в покупки: {self.recipe.title}'
 
 
@@ -212,7 +211,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Пользователь',
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='favorites',
         help_text='Избранное пользователя',
     )
@@ -221,7 +220,7 @@ class Favorite(models.Model):
         verbose_name='Рецепт',
         on_delete=models.CASCADE,
         related_name='favorites',
-        help_text='Добавленные в избранное рецепты',
+        help_text='Добавленные в избранное рецепты'
     )
 
     class Meta:
@@ -230,5 +229,5 @@ class Favorite(models.Model):
         unique_together = ['user', 'recipe']
         ordering = ('-recipe__pub_date',)
 
-    def __str__(self): 
+    def __str__(self):
         return f'{self.user.username} добавил в избранное: {self.recipe.title}'

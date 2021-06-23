@@ -10,9 +10,8 @@ User = get_user_model()
 class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Персональные данные', 
-            {'fields': ('first_name', 'last_name', 'email')}
-        ),
+        ('Персональные данные',
+            {'fields': ('first_name', 'last_name', 'email')}),
         ('Разрешения', {'fields': ('is_staff', 'is_active')}),
     )
     list_display = ('username', 'email', 'is_staff', 'is_active')
@@ -24,5 +23,4 @@ class MyUserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
-
 admin.site.register(User, MyUserAdmin)

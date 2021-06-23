@@ -18,7 +18,7 @@ class IngredientAdmin(admin.ModelAdmin):
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientRecipeInLine,)
     list_display = (
-        'slug', 'title', 'author', 'cooking_time', 
+        'slug', 'title', 'author', 'cooking_time',
         'get_tags', 'get_purchases_counter'
     )
     search_fields = ('title',)
@@ -32,12 +32,13 @@ class RecipeAdmin(admin.ModelAdmin):
         qs = obj.list_tags()
         if qs:
             return list(qs)
-    
+
     def get_purchases_counter(self, obj):
         return obj.purchases.count()
 
     get_tags.short_description = 'Теги'
     get_purchases_counter.short_description = 'Кол-во добавлений в покупки'
+
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')

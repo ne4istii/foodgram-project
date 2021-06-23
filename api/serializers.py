@@ -4,7 +4,6 @@ from rest_framework.validators import UniqueTogetherValidator
 from recipes.models import Favorite, Ingredient, Recipe, Purchase, Subscription
 
 
-
 class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -18,7 +17,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
             ),
         )
 
-       
+
 class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -48,7 +47,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Purchase
         fields = ('user', 'recipe')

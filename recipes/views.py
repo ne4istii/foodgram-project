@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .filters import FavoriteFilter, RecipeFilter
 from .forms import RecipeForm
-from .models import  Ingredient, IngredientRecipe, Recipe, Tag, User 
+from .models import Ingredient, IngredientRecipe, Recipe, Tag
 from foodgram.settings import OBJ_PER_PAGE
 from .utils import get_ingredients, get_purchase_ingredients
 
@@ -24,7 +24,7 @@ def recipes(request):
     user = request.user
     tags = Tag.objects.all()
     recipes = RecipeFilter(
-        request.GET, 
+        request.GET,
         queryset=Recipe.objects.all()
     )
     active_tags = recipes.data.get('search')
@@ -32,24 +32,23 @@ def recipes(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     purchases_counter = user.purchases.count()
-    return render(request,"index.html", {
+    return render(request, 'index.html', {
         'active_tags': active_tags,
         'tags': tags,
         'page': page,
         'paginator': paginator,
         'purchases_counter': purchases_counter
     })
- 
+
 
 def recipe_view(request, slug):
     recipe = get_object_or_404(
-        Recipe.objects, 
+        Recipe.objects,
         slug=slug
     )
     is_author = recipe.author == request.user
     is_following = recipe.author.following.filter(
-        user__id=request.user.id
-        ).exists()
+        user__id=request.user.id).exists()
     is_purchassing = recipe.purchases.filter(
         user__id=request.user.id
     ).exists()
@@ -58,19 +57,19 @@ def recipe_view(request, slug):
         'recipe': recipe,
         'is_author': is_author,
         'is_following': is_following,
-        'is_purchassing':is_purchassing,
+        'is_purchassing': is_purchassing,
         'ingredientsrecipe': ingredientsrecipe
-    }) 
+    })
 
 
 def profile(request, username):
     author = get_object_or_404(
-        User, 
+        User,
         username=username
     )
     tags = Tag.objects.all()
     recipes = RecipeFilter(
-        request.GET, 
+        request.GET,
         queryset=author.recipes.all()
     )
     active_tags = recipes.data.get('search')
@@ -84,12 +83,12 @@ def profile(request, username):
     return render(request, 'authorRecipe.html', {
         'active_tags': active_tags,
         'tags': tags,
-        'page': page, 
+        'page': page,
         'author': author,
         'paginator': paginator,
         'recipes': recipes,
         'is_author': is_author,
-        'is_following': is_following,
+        'is_following': is_following
     })
 
 
@@ -103,15 +102,14 @@ def save_recipe(request, form):
         if ingredient.title not in ingredients.keys():
             IngredientRecipe.objects.filter(
                 recipe=recipe,
-                ingredient=ingredient,
-        ).delete()
+                ingredient=ingredient).delete()
     # ингредиенты из POST запроса для создания и редактирования
     for name, quantity in ingredients.items():
         ingredient = get_object_or_404(Ingredient, title=name)
         IngredientRecipe.objects.update_or_create(
-                recipe=recipe,
-                ingredient=ingredient,
-                defaults={'amount': quantity}
+            recipe=recipe,
+            ingredient=ingredient,
+            defaults={'amount': quantity}
         )
     tags = request.POST.getlist('tags')
     recipe.tags.clear()
@@ -137,31 +135,31 @@ def new_recipe(request):
             'recipes'
         )
     return render(request, 'formRecipe.html', {
-            'form': form,
-        })
+        'form': form,
+    })
 
 
 @login_required
 def recipe_edit(request, slug):
     recipe = get_object_or_404(
-        Recipe.objects, 
+        Recipe.objects,
         slug=slug
     )
     is_author = recipe.author == request.user
     form = RecipeForm(
-        data=request.POST or None, 
-        files=request.FILES or None, 
+        data=request.POST or None,
+        files=request.FILES or None,
         instance=recipe
     )
     ingredientsrecipe = recipe.ingredientsrecipe.all()
     if form.is_valid():
         save_recipe(request, form)
         return redirect(
-            'recipe_view', 
+            'recipe_view',
             recipe.slug,
         )
     return render(request, 'formRecipe.html', {
-        'form': form, 
+        'form': form,
         'recipe': recipe,
         'ingredientsrecipe': ingredientsrecipe,
         'is_author': is_author
@@ -171,7 +169,7 @@ def recipe_edit(request, slug):
 @login_required
 def recipe_delete(request, slug):
     get_object_or_404(
-        Recipe, 
+        Recipe,
         slug=slug
     ).delete()
     return redirect('recipes')
@@ -187,7 +185,7 @@ def follow(request):
     page = paginator.get_page(page_number)
     return render(request, 'myFollow.html', {
         'page': page,
-        'paginator': paginator,
+        'paginator': paginator
     })
 
 
@@ -199,7 +197,7 @@ def purchases(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'shopList.html', {
-        'page': page, 
+        'page': page,
         'paginator': paginator,
     })
 
@@ -209,7 +207,7 @@ def favorites(request):
     user = request.user
     tags = Tag.objects.all()
     recipesfavorite = FavoriteFilter(
-        request.GET, 
+        request.GET,
         queryset=user.favorites.all()
     )
     active_tags = recipesfavorite.data.get('search')
@@ -220,7 +218,7 @@ def favorites(request):
         'active_tags': active_tags,
         'tags': tags,
         'page': page,
-        'paginator': paginator,
+        'paginator': paginator
     })
 
 
@@ -245,20 +243,18 @@ def purchases_download(request):
     p.save()
     buffer.seek(0)
     return FileResponse(
-        buffer, 
-        as_attachment=True, 
+        buffer,
+        as_attachment=True,
         filename=f'purchases_{datetime.datetime.now()}.pdf'
     )
 
 
 def page_not_found(request, exception):
-    return render(request, 'misc/404.html', 
-        {'path': request.path}, 
+    return render(request, 'misc/404.html', {
+        'path': request.path},
         status=404
     )
 
 
 def server_error(request):
-    return render(request, 'misc/500.html', 
-        status=500
-    )
+    return render(request, 'misc/500.html', status=500)

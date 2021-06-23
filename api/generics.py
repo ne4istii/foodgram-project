@@ -10,7 +10,7 @@ class FoodgramModelViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         recipe = get_object_or_404(
-            Recipe.objects, 
+            Recipe.objects,
             id=request.data.get('id')
         ).id
         request.data.pop('id')

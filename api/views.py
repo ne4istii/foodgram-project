@@ -10,7 +10,6 @@ from .serializers import (IngredientSerializer, FavoriteSerializer,
 User = get_user_model()
 
 
-
 class FavoriteViewSet(FoodgramModelViewSet):
     serializer_class = FavoriteSerializer
     queryset = Favorite.objects.all()
@@ -45,18 +44,18 @@ class SubscriptionViewSet(FoodgramModelViewSet):
 
     def get_object(self):
         author = get_object_or_404(
-            User.objects, 
+            User.objects,
             pk=self.kwargs.get('pk')
         ).id
         return get_object_or_404(
-            Subscription.objects, 
+            Subscription.objects,
             author=author,
             user=self.request.user.pk
         )
 
     def create(self, request, *args, **kwargs):
         author = get_object_or_404(
-            User.objects, 
+            User.objects,
             id=request.data.get('id')
         ).id
         request.data.pop('id')

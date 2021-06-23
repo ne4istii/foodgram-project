@@ -4,8 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 
 User = get_user_model()
 
+
 class CreationForm(UserCreationForm):
-    
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("first_name", "last_name", "username", "email")
@@ -13,4 +14,3 @@ class CreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
-        

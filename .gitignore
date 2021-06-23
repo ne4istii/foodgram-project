@@ -135,3 +135,4 @@ media/
 static (copy).zip
 workspace.code-workspace
 db.sqlite3
+foodgram/settings_local.py
