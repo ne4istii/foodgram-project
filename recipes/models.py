@@ -1,9 +1,7 @@
-from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
-
 from pytils.translit import slugify
-
 
 User = get_user_model()
 
@@ -146,8 +144,8 @@ class IngredientRecipe(models.Model):
     )
 
     def __str__(self):
-        return f'{self.recipe.title} содержится {self.ingredient.title} \
-            в количестве {self.amount}'
+        return (f'{self.recipe.title} содержится {self.ingredient.title} '
+                f'в количестве {self.amount}')
 
 
 class Subscription(models.Model):
@@ -172,8 +170,8 @@ class Subscription(models.Model):
         unique_together = ['user', 'author']
 
     def __str__(self):
-        return f'{self.user.username} подписан на автора: \
-            {self.author.username}'
+        return (f'{self.user.username} подписан на автора: '
+                f'{self.author.username}')
 
     @property
     def has_following(self):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from recipes.models import Favorite, Ingredient, Recipe, Purchase, Subscription
+from recipes.models import Favorite, Ingredient, Purchase, Recipe, Subscription
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

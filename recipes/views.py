@@ -1,21 +1,21 @@
+import datetime
+import io
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+
+from foodgram.settings import OBJ_PER_PAGE
 
 from .filters import FavoriteFilter, RecipeFilter
 from .forms import RecipeForm
 from .models import Ingredient, IngredientRecipe, Recipe, Tag
-from foodgram.settings import OBJ_PER_PAGE
 from .utils import get_ingredients, get_purchase_ingredients
-
-import datetime
-import io
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-
 
 User = get_user_model()
 

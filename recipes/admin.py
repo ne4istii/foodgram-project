@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Ingredient, Recipe, Tag, Subscription, Purchase, Favorite
+from .models import Favorite, Ingredient, Purchase, Recipe, Subscription, Tag
 
 
 class IngredientRecipeInLine(admin.TabularInline):
@@ -32,6 +32,7 @@ class RecipeAdmin(admin.ModelAdmin):
         qs = obj.list_tags()
         if qs:
             return list(qs)
+        return qs
 
     def get_purchases_counter(self, obj):
         return obj.purchases.count()
