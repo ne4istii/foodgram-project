@@ -232,7 +232,7 @@ def purchases_download(request):
     p.setFont('DejaVuSerif', 14)
     x = 100
     y = 800
-    p.drawString(x, y, "Покупки:")
+    p.drawString(x, y, 'Покупки:')
     data = get_purchase_ingredients(request)
     delta = 20
     counter = 1
