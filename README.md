@@ -44,4 +44,4 @@ sudo chmod +x /usr/local/bin/docker-compose
 - http://ne4istii.tk/
 - Автор: [ne4istii](https://github.com/ne4istii)
 
-![yamdb_workflow Actions Status](https://github.com/ne4istii/foodgram/actions/workflows/foodgram_workflow.yaml/badge.svg)
+![foodgram_workflow Actions Status](https://github.com/ne4istii/foodgram/actions/workflows/foodgram_workflow.yaml/badge.svg)
