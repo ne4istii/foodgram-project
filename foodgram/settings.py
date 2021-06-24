@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xth8fgvtpl$)csmd-f9w_x$mlun)y11%m0af*n&7@t0e$%f!-3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -153,16 +153,16 @@ REST_FRAMEWORK = {
 # EMAIL_HOST = os.getenv('EMAIL_HOST')
 # EMAIL_POST = os.getenv('EMAIL_POST')
 # EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST_USER = 'ne4istii1@gmail.com'
-# EMAIL_HOST_PASSWORD = 'n49Ma3yxT5'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_POST = 587
-# EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = 'support@bigkernel.ru'
-EMAIL_HOST_PASSWORD = 'geEaMMm{2'
-EMAIL_HOST = 'mail.nic.ru'
-EMAIL_POST = 25
-EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'Info <no-reply@ne4istii.tk>'
+EMAIL_HOST_USER = 'ne4istii1@gmail.com'
+EMAIL_HOST_PASSWORD = 'n49Ma3yxT5'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_POST = 587
+EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST_USER = 'support@bigkernel.ru'
+# EMAIL_HOST_PASSWORD = 'geEaMMm{2'
+# EMAIL_HOST = 'mail.nic.ru'
+# EMAIL_POST = 25
+# EMAIL_USE_TLS = False
+# DEFAULT_FROM_EMAIL = 'Info <no-reply@ne4istii.tk>'
