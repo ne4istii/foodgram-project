@@ -143,22 +143,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-# EMAIL_HOST = os.getenv('EMAIL_HOST')
-# EMAIL_POST = os.getenv('EMAIL_POST')
-# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = 'ne4istii1@gmail.com'
-EMAIL_HOST_PASSWORD = 'n49Ma3yxT5'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST_USER = 'support@bigkernel.ru'
-# EMAIL_HOST_PASSWORD = 'geEaMMm{2'
-# EMAIL_HOST = 'mail.nic.ru'
-# EMAIL_POST = 25
-# EMAIL_USE_TLS = False
-# DEFAULT_FROM_EMAIL = 'Info <no-reply@ne4istii.tk>'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
