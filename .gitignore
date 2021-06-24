@@ -131,8 +131,8 @@ staticfilesall/
 sent_emails/
 recipes/migrations/
 users/migrations/
-media/
 static (copy).zip
 workspace.code-workspace
 db.sqlite3
 foodgram/settings_*
+media/cache
