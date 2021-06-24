@@ -149,4 +149,3 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_POST = os.environ.get('EMAIL_POST')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-EMAIL_HOST_USER = 'no-reply-confirmation@code.com'
