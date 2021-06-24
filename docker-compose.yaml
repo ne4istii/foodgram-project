@@ -21,8 +21,10 @@ services:
       - ./.env
   
   nginx:
-    image: nginx:1.19.3
+    image: nginx:alpine
     restart: unless-stopped
+    networks:
+      nginx_net:
     ports:
       - "80:80"
       - "443:443"
@@ -39,12 +41,19 @@ services:
   certbot:
     container_name: certbot
     image: certbot/certbot
+    restart: unless-stopped
+    networks:
+      nginx_net:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     depends_on:
       - nginx
+
+networks:
+  nginx_net:
+    name: nginx_net
 
 volumes:
   postgres_data: 
