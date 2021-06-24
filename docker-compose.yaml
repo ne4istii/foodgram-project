@@ -15,7 +15,7 @@ services:
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_value:/code/static/
-      - media_value:/home/ne4istii/mediafiles/
+      - media_value:/code/media/
     depends_on:
       - db
     env_file:
