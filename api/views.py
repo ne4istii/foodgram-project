@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
 
 from recipes.models import Favorite, Ingredient, Purchase, Subscription
 
@@ -38,7 +39,7 @@ class IngredientViewSet(FoodgramModelViewSet):
         return queryset.filter(title__istartswith=search_text)
 
 
-class SubscriptionViewSet(FoodgramModelViewSet):
+class SubscriptionViewSet(ModelViewSet):
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()
 
