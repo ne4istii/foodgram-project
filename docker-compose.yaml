@@ -12,6 +12,7 @@ services:
   web:
     image: ne4istii/foodgram:latest
     restart: always
+    command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_value:/code/static/
       - media_value:/code/media/
@@ -21,39 +22,15 @@ services:
       - ./.env
   
   nginx:
-    image: nginx:alpine
-    restart: unless-stopped
-    networks:
-      nginx_net:
+    image: nginx:1.19.3
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     depends_on:
       - web
-
-  certbot:
-    container_name: certbot
-    image: certbot/certbot
-    restart: unless-stopped
-    networks:
-      nginx_net:
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    depends_on:
-      - nginx
-
-networks:
-  nginx_net:
-    name: nginx_net
 
 volumes:
   postgres_data: 

@@ -134,5 +134,4 @@ users/migrations/
 static (copy).zip
 workspace.code-workspace
 db.sqlite3
-foodgram/settings_*
-fixtures_
+local_*
