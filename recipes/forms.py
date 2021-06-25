@@ -24,6 +24,12 @@ class RecipeForm(forms.ModelForm):
         for key in self.data.keys():
             if key.startswith('nameIngredient'):
                 ingredientkeys.append(key)
+                num = key.partition('_')[-1]
+                value = self.data[f'valueIngredient_{num}']
+                is_negative_number = lambda value: str(value)[0] == '-'
+                if is_negative_number(value):
+                    message = 'Вес ингредиента должен быть положительным.'
+                    raise forms.ValidationError(message)
         if not ingredientkeys:
             message = 'Выберите хотя бы 1 ингредиент.'
             raise forms.ValidationError(message)
